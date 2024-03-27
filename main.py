@@ -14,7 +14,12 @@ app.add_middleware(
 
 @app.get("/add_player/{name}")
 def add_player(name: str):
-    print(name)
+    print(name + " added")
+    return name
+
+@app.get("/remove_player/{name}")
+def remove_player(name: str):
+    print(name + " removed")
     return name
 
 @app.websocket("/get_ready_players")
