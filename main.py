@@ -1,6 +1,11 @@
-from fastapi import FastAPI, WebSocket
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-import json
+
+from connection_manager import ConnectionManager
+from kaluki import Kaluki
+
+kaluki = Kaluki()
+manager = ConnectionManager()
 
 app = FastAPI()
 app.add_middleware(
@@ -12,18 +17,25 @@ app.add_middleware(
 )
 
 
-@app.get("/add_player/{name}")
-def add_player(name: str):
-    print(name + " added")
-    return name
+@app.get("/start_game")
+def start_game():
+    kaluki.start_game()
 
-@app.get("/remove_player/{name}")
-def remove_player(name: str):
-    print(name + " removed")
-    return name
+@app.websocket("/update_players")
+async def update_players(websocket: WebSocket):
+    await manager.connect(websocket)
+    try:
+        while True:
+            data = await websocket.receive_json()
+            if data["method"] == "add":
+                kaluki.add_player(data["user"])
+            elif data["method"] == "remove":
+                kaluki.remove_player(data["user"])
 
-@app.websocket("/get_ready_players")
-async def get_ready_players(websocket: WebSocket):
-    players = ["Player 1", "Player 2", "Player 3"]
-    await websocket.accept()
-    await websocket.send_json(json.dumps(players))
+            if not kaluki.has_table():
+                response = {"user": data["user"], "method": data["method"], "players": []}
+            else:
+                response = {"user": data["user"], "method": data["method"], "players": kaluki.get_ready_players()}
+            await manager.broadcast(response)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket)
