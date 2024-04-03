@@ -1,26 +1,41 @@
+import random
 from card import Card
+from player import Player
 
 class Table:
-    def __init__(self, player: str):
-        self._players = [player]
+    def __init__(self, name: str):
+        self._players = [Player(name)]
         self._deck = []
         self._trash = []
     
     def get_players(self):
         return self._players
     
-    def add_player(self, player: str):
-        if player in self._players:
-            raise ValueError("Player already exists.")
-        else:
-            self._players.append(player)
+    def add_player(self, name: str):
+        self._players.append(Player(name))
 
-    def remove_player(self, player: str):
-        self._players.remove(player)
+    def remove_player(self, name: str):
+        self._players = [player for player in self._players if player.get_name() != name]
 
-    def set_deck(self):
-        # initialize deck with cards
-        pass
+    def create_deck(self):
+        for suit in ["spades", "clubs", "diamonds", "hearts"]:
+            for i in range(2, 11):
+                self._deck.append(Card(str(i) + "_of_" + suit, i))
+            for c in ["jack", "queen", "king"]:
+                self._deck.append(Card(c + "_of_" + suit, 10))
+            self._deck.append(Card("ace_of_" + suit, None))
+        self._deck.append(Card("black_joker", None))
+        self._deck.append(Card("red_joker", None))
+        self._deck.extend(self._deck)
+
+    def shuffle_deck(self):
+        random.shuffle(self._deck)
+
+    def deal_cards(self):
+        for _ in range(14):
+            for player in self._players:
+                player.add_to_hand(0, self._deck.pop())
+        self._players[0].add_to_hand(0, self._deck.pop())
 
     def remove_from_deck(self):
         return self._deck.pop()

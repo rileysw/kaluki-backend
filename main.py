@@ -35,7 +35,7 @@ async def update_players(websocket: WebSocket):
             if not kaluki.has_table():
                 response = {"user": data["user"], "method": data["method"], "players": []}
             else:
-                response = {"user": data["user"], "method": data["method"], "players": kaluki.get_ready_players()}
+                response = {"user": data["user"], "method": data["method"], "players": kaluki.get_player_names()}
             await manager.broadcast(response)
     except WebSocketDisconnect:
         manager.disconnect(websocket)

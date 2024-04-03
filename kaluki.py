@@ -16,8 +16,16 @@ class Kaluki:
     def remove_player(self, name: str):
         self._table.remove_player(name)
 
-    def get_ready_players(self):
-        return self._table.get_players()
+    def get_player_names(self):
+        return [player.get_name() for player in self._table.get_players()]
 
     def start_game(self):
-        pass
+        self._table.create_deck()
+        self._table.shuffle_deck()
+        self._table.deal_cards()
+
+        # test
+        for player in self._table.get_players():
+            print("player: ", player.get_name())
+            print("size: ", len(player.get_hand()))
+            print("hand: ", player.get_hand())
