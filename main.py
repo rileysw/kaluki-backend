@@ -17,11 +17,7 @@ app.add_middleware(
 )
 
 
-@app.get("/start_game")
-def start_game():
-    kaluki.start_game()
-
-@app.websocket("/update_players")
+@app.websocket("/setup_game")
 async def update_players(websocket: WebSocket):
     await manager.connect(websocket)
     try:
@@ -31,6 +27,8 @@ async def update_players(websocket: WebSocket):
                 kaluki.add_player(data["user"])
             elif data["method"] == "remove":
                 kaluki.remove_player(data["user"])
+            elif data["method"] == "start":
+                kaluki.start_game()
 
             if not kaluki.has_table():
                 response = {"user": data["user"], "method": data["method"], "players": []}
