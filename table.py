@@ -18,15 +18,19 @@ class Table:
         self._players = [player for player in self._players if player.get_name() != name]
 
     def create_deck(self):
-        for suit in ["spades", "clubs", "diamonds", "hearts"]:
-            for i in range(2, 11):
-                self._deck.append(Card(str(i) + "_of_" + suit, i))
-            for c in ["jack", "queen", "king"]:
-                self._deck.append(Card(c + "_of_" + suit, 10))
-            self._deck.append(Card("ace_of_" + suit, None))
-        self._deck.append(Card("black_joker", None))
-        self._deck.append(Card("red_joker", None))
-        self._deck.extend(self._deck)
+        def make_one_deck():
+            one_deck = []
+            for suit in ["spades", "clubs", "diamonds", "hearts"]:
+                for i in range(2, 11):
+                    one_deck.append(Card(str(i) + "_of_" + suit, i))
+                for c in ["jack", "queen", "king"]:
+                    one_deck.append(Card(c + "_of_" + suit, 10))
+                one_deck.append(Card("ace_of_" + suit, None))
+            one_deck.append(Card("black_joker", None))
+            one_deck.append(Card("red_joker", None))
+            return one_deck
+        self._deck.extend(make_one_deck())
+        self._deck.extend(make_one_deck())
 
     def shuffle_deck(self):
         random.shuffle(self._deck)

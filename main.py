@@ -37,3 +37,7 @@ async def update_players(websocket: WebSocket):
             await manager.broadcast(response)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
+
+@app.get("/player_hand/{player}")
+def player_hand(player):
+    return kaluki.get_player_hand(player)
