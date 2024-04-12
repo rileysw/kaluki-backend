@@ -1,4 +1,5 @@
 from table import Table
+from card import Card
 
 class Kaluki:
     def __init__(self):
@@ -34,3 +35,25 @@ class Kaluki:
         for player in self._table.get_players():
             if player.get_name() == name:
                 return [(card.get_name(), card.get_value(), card.get_id()) for card in player.get_hand()]
+
+    def update_player_hand(self, name: str, hand: list):
+        for player in self._table.get_players():
+            if player.get_name() == name:
+                player.set_hand([Card(card[0], card[1], card[2]) for card in hand])
+                break
+
+    def draw_card(self, name: str):
+        for player in self._table.get_players():
+            if player.get_name() == name:
+                if len(player.get_hand()) == 15:
+                    raise ValueError("Hand already has 15 cards.")
+                else:
+                    player.add_to_hand(len(player.get_hand()), self._table.remove_from_deck())
+                    break
+
+    def trash_card(self, name: str, index: int):
+        for player in self._table.get_players():
+            if player.get_name() == name:
+                trash_card = player.remove_from_hand(index)
+                self._table.add_to_trash(trash_card)
+                return [trash_card.get_name(), trash_card.get_value(), trash_card.get_id()]

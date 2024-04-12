@@ -13,6 +13,9 @@ class Player:
     def get_hand(self):
         return self._hand
     
+    def set_hand(self, hand: list):
+        self._hand = hand
+
     def add_to_hand(self, index: int, card: Card):
         self._hand.insert(index, card)
 
@@ -22,7 +25,7 @@ class Player:
         self._hand[index2] = temp
 
     def remove_from_hand(self, index: int):
-        self._hand.pop(index)
+        return self._hand.pop(index)
 
     def get_laydowns(self):
         return self._laydowns
