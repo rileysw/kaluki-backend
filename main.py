@@ -33,6 +33,8 @@ async def update_players(websocket: WebSocket):
 
             if not kaluki.has_table():
                 response = {"user": data["user"], "method": data["method"], "players": []}
+            elif data["method"] == "start":
+                response = {"user": data["user"], "method": data["method"], "players": kaluki.get_player_names(), "turn": kaluki.update_turn()}
             else:
                 response = {"user": data["user"], "method": data["method"], "players": kaluki.get_player_names()}
             await manager.broadcast(response)
@@ -61,7 +63,8 @@ async def play_game(websocket: WebSocket):
                 response = {"user": data["user"],
                             "method": data["method"],
                             "card": trash_card,
-                            "hand": kaluki.get_player_hand(data["user"])}
+                            "hand": kaluki.get_player_hand(data["user"]),
+                            "turn": kaluki.update_turn()}
             await manager.broadcast(response)
     except WebSocketDisconnect:
         manager.disconnect(websocket)

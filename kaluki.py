@@ -4,6 +4,7 @@ from card import Card
 class Kaluki:
     def __init__(self):
         self._table = None
+        self._turn_index = None
 
     def has_table(self):
         return self._table != None
@@ -30,6 +31,13 @@ class Kaluki:
             print("player: ", player.get_name())
             print("size: ", len(player.get_hand()))
             print("hand: ", player.get_hand())
+
+    def update_turn(self):
+        if self._turn_index == None or self._turn_index == len(self._table.get_players()) - 1:
+            self._turn_index = 0
+        else:
+            self._turn_index += 1
+        return self._table.get_players()[self._turn_index].get_name()
 
     def get_player_hand(self, name: str):
         for player in self._table.get_players():
