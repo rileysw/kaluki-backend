@@ -5,6 +5,7 @@ from player import Player
 class Table:
     def __init__(self, name: str):
         self._players = [Player(name)]
+        self._turn_index = None
         self._deck = []
         self._trash = []
     
@@ -16,6 +17,15 @@ class Table:
 
     def remove_player(self, name: str):
         self._players = [player for player in self._players if player.get_name() != name]
+
+    def get_turn(self):
+        return self._players[self._turn_index].get_name()
+
+    def update_turn(self):
+        if self._turn_index == None or self._turn_index == len(self._players) - 1:
+            self._turn_index = 0
+        else:
+            self._turn_index += 1
 
     def create_deck(self):
         def make_one_deck():

@@ -4,12 +4,19 @@ from laydown import Laydown
 class Player:
     def __init__(self, name: str):
         self._name = name
+        self._has_drawn = False
         self._hand = []
         self._laydowns = []
 
     def get_name(self):
         return self._name
     
+    def get_has_drawn(self):
+        return self._has_drawn
+
+    def set_has_drawn(self, has_drawn: bool):
+        self._has_drawn = has_drawn
+
     def get_hand(self):
         return self._hand
     

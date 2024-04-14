@@ -4,7 +4,6 @@ from card import Card
 class Kaluki:
     def __init__(self):
         self._table = None
-        self._turn_index = None
 
     def has_table(self):
         return self._table != None
@@ -25,6 +24,7 @@ class Kaluki:
         self._table.create_deck()
         self._table.shuffle_deck()
         self._table.deal_cards()
+        self._table.get_players()[0].set_has_drawn(True)
 
         # test
         for player in self._table.get_players():
@@ -32,12 +32,16 @@ class Kaluki:
             print("size: ", len(player.get_hand()))
             print("hand: ", player.get_hand())
 
+    def get_turn(self):
+        return self._table.get_turn()
+
     def update_turn(self):
-        if self._turn_index == None or self._turn_index == len(self._table.get_players()) - 1:
-            self._turn_index = 0
-        else:
-            self._turn_index += 1
-        return self._table.get_players()[self._turn_index].get_name()
+        self._table.update_turn()
+
+    def get_has_drawn(self, name: str):
+        for player in self._table.get_players():
+            if player.get_name() == name:
+                return player.get_has_drawn()
 
     def get_player_hand(self, name: str):
         for player in self._table.get_players():
@@ -57,6 +61,7 @@ class Kaluki:
                     raise ValueError("Hand already has 15 cards.")
                 else:
                     player.add_to_hand(len(player.get_hand()), self._table.remove_from_deck())
+                    player.set_has_drawn(True)
                     break
 
     def trash_card(self, name: str, index: int):
@@ -64,4 +69,5 @@ class Kaluki:
             if player.get_name() == name:
                 trash_card = player.remove_from_hand(index)
                 self._table.add_to_trash(trash_card)
+                player.set_has_drawn(False)
                 return [trash_card.get_name(), trash_card.get_value(), trash_card.get_id()]
