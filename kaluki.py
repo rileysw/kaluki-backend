@@ -64,10 +64,15 @@ class Kaluki:
                     player.set_has_drawn(True)
                     break
 
+    def get_trash_card(self):
+        trash_card = self._table.peek_trash()
+        if trash_card == None:
+            return None
+        return [trash_card.get_name(), trash_card.get_value(), trash_card.get_id()]
+
     def trash_card(self, name: str, index: int):
         for player in self._table.get_players():
             if player.get_name() == name:
                 trash_card = player.remove_from_hand(index)
                 self._table.add_to_trash(trash_card)
                 player.set_has_drawn(False)
-                return [trash_card.get_name(), trash_card.get_value(), trash_card.get_id()]

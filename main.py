@@ -44,7 +44,7 @@ async def update_players(websocket: WebSocket):
 
 @app.get("/game_info/{player}")
 def game_info(player):
-    return {"hand": kaluki.get_player_hand(player), "turn": kaluki.get_turn(), "hasDrawn": kaluki.get_has_drawn(player)}
+    return {"hand": kaluki.get_player_hand(player), "turn": kaluki.get_turn(), "hasDrawn": kaluki.get_has_drawn(player), "trashCard": kaluki.get_trash_card()}
 
 @app.post("/draw_card")
 def draw_card(req: Hand):
@@ -60,11 +60,11 @@ async def play_game(websocket: WebSocket):
             data = await websocket.receive_json()
             if data["method"] == "trash":
                 kaluki.update_player_hand(data["user"], data["hand"])
-                trash_card = kaluki.trash_card(data["user"], data["index"])
+                kaluki.trash_card(data["user"], data["index"])
                 kaluki.update_turn()
                 response = {"user": data["user"],
                             "method": data["method"],
-                            "card": trash_card,
+                            "trashCard": kaluki.get_trash_card(),
                             "hand": kaluki.get_player_hand(data["user"]),
                             "turn": kaluki.get_turn(),
                             "hasDrawn": kaluki.get_has_drawn(data["user"])}
