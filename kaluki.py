@@ -1,5 +1,6 @@
 from table import Table
 from card import Card
+from laydown import Laydown
 
 class Kaluki:
     def __init__(self):
@@ -81,4 +82,4 @@ class Kaluki:
         for player in self._table.get_players():
             if player.get_name() == name:
                 for laydown in laydowns:
-                    player.add_to_laydowns([Card(card[0], card[1], card[2]) for card in laydown])
+                    player.add_to_laydowns(Laydown([Card(card[0], card[1], card[2]) for card in laydown]))
