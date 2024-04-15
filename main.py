@@ -60,7 +60,7 @@ async def play_game(websocket: WebSocket):
             data = await websocket.receive_json()
             if data["method"] == "trash":
                 kaluki.update_player_hand(data["user"], data["hand"])
-                kaluki.trash_card(data["user"], data["index"])
+                kaluki.trash_card(data["user"], data["cardId"])
                 kaluki.update_turn()
                 response = {"user": data["user"],
                             "method": data["method"],
@@ -68,6 +68,10 @@ async def play_game(websocket: WebSocket):
                             "hand": kaluki.get_player_hand(data["user"]),
                             "turn": kaluki.get_turn(),
                             "hasDrawn": kaluki.get_has_drawn(data["user"])}
+            elif data["method"] == "laydown":
+                kaluki.update_player_hand(data["user"], data["hand"])
+                kaluki.add_laydowns(data["user"], data["laydowns"])
+                # generate response
             await manager.broadcast(response)
     except WebSocketDisconnect:
         manager.disconnect(websocket)

@@ -70,9 +70,15 @@ class Kaluki:
             return None
         return [trash_card.get_name(), trash_card.get_value(), trash_card.get_id()]
 
-    def trash_card(self, name: str, index: int):
+    def trash_card(self, name: str, card_id: int):
         for player in self._table.get_players():
             if player.get_name() == name:
-                trash_card = player.remove_from_hand(index)
+                trash_card = player.remove_from_hand(card_id)
                 self._table.add_to_trash(trash_card)
                 player.set_has_drawn(False)
+
+    def add_laydowns(self, name: str, laydowns: list):
+        for player in self._table.get_players():
+            if player.get_name() == name:
+                for laydown in laydowns:
+                    player.add_to_laydowns([Card(card[0], card[1], card[2]) for card in laydown])

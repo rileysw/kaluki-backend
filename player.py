@@ -31,8 +31,11 @@ class Player:
         self._hand[index1] = self._hand[index2]
         self._hand[index2] = temp
 
-    def remove_from_hand(self, index: int):
-        return self._hand.pop(index)
+    def remove_from_hand(self, card_id: int):
+        for card in self._hand:
+            if card.get_id() == card_id:
+                self._hand.remove(card)
+                return card
 
     def get_laydowns(self):
         return self._laydowns
