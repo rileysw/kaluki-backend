@@ -27,12 +27,6 @@ class Kaluki:
         self._table.deal_cards()
         self._table.get_players()[0].set_has_drawn(True)
 
-        # test
-        for player in self._table.get_players():
-            print("player: ", player.get_name())
-            print("size: ", len(player.get_hand()))
-            print("hand: ", player.get_hand())
-
     def get_turn(self):
         return self._table.get_turn()
 
@@ -78,8 +72,19 @@ class Kaluki:
                 self._table.add_to_trash(trash_card)
                 player.set_has_drawn(False)
 
-    def add_laydowns(self, name: str, laydowns: list):
+    def get_laydowns(self):
+        laydowns_dict = dict()
+        for player in self._table.get_players():
+            for laydown in player.get_laydowns():
+                if player.get_name() in laydowns_dict:
+                    laydowns_dict[player.get_name()].append([[card.get_name(), card.get_value(), card.get_id()] for card in laydown.get()])
+                else:
+                    laydowns_dict[player.get_name()] = [[[card.get_name(), card.get_value(), card.get_id()] for card in laydown.get()]]
+        return laydowns_dict
+
+    def add_laydown(self, name: str, laydown: list):
         for player in self._table.get_players():
             if player.get_name() == name:
-                for laydown in laydowns:
-                    player.add_to_laydowns(Laydown([Card(card[0], card[1], card[2]) for card in laydown]))
+                player.add_to_laydowns(Laydown([Card(card[0], card[1], card[2]) for card in laydown]))
+                for card in laydown:
+                    player.remove_from_hand(card[2])

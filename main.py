@@ -44,7 +44,7 @@ async def update_players(websocket: WebSocket):
 
 @app.get("/game_info/{player}")
 def game_info(player):
-    return {"hand": kaluki.get_player_hand(player), "turn": kaluki.get_turn(), "hasDrawn": kaluki.get_has_drawn(player), "trashCard": kaluki.get_trash_card()}
+    return {"hand": kaluki.get_player_hand(player), "turn": kaluki.get_turn(), "hasDrawn": kaluki.get_has_drawn(player), "allLaydowns": kaluki.get_laydowns(), "trashCard": kaluki.get_trash_card()}
 
 @app.post("/draw_card")
 def draw_card(req: Hand):
@@ -70,8 +70,11 @@ async def play_game(websocket: WebSocket):
                             "hasDrawn": kaluki.get_has_drawn(data["user"])}
             elif data["method"] == "laydown":
                 kaluki.update_player_hand(data["user"], data["hand"])
-                kaluki.add_laydowns(data["user"], data["laydowns"])
-                # generate response
+                kaluki.add_laydown(data["user"], data["laydown"])
+                response = {"user": data["user"],
+                            "method": data["method"],
+                            "hand": kaluki.get_player_hand(data["user"]),
+                            "allLaydowns": kaluki.get_laydowns()}
             await manager.broadcast(response)
     except WebSocketDisconnect:
         manager.disconnect(websocket)
