@@ -2,21 +2,23 @@ import random
 from card import Card
 from player import Player
 
+
 class Table:
     def __init__(self, name: str):
         self._players = [Player(name)]
         self._turn_index = None
         self._deck = []
         self._trash = []
-    
+
     def get_players(self):
         return self._players
-    
+
     def add_player(self, name: str):
         self._players.append(Player(name))
 
     def remove_player(self, name: str):
-        self._players = [player for player in self._players if player.get_name() != name]
+        self._players = [
+            player for player in self._players if player.get_name() != name]
 
     def get_turn(self):
         return self._players[self._turn_index].get_name()
@@ -53,7 +55,7 @@ class Table:
 
     def remove_from_deck(self):
         return self._deck.pop()
-    
+
     def add_to_trash(self, card: Card):
         self._trash.append(card)
 
@@ -62,6 +64,6 @@ class Table:
             return None
         else:
             return self._trash[-1]
-    
+
     def remove_from_trash(self):
         return self._trash.pop()

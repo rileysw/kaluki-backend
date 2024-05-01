@@ -1,6 +1,7 @@
 from card import Card
 from laydown import Laydown
 
+
 class Player:
     def __init__(self, name: str):
         self._name = name
@@ -10,7 +11,7 @@ class Player:
 
     def get_name(self):
         return self._name
-    
+
     def get_has_drawn(self):
         return self._has_drawn
 
@@ -19,7 +20,7 @@ class Player:
 
     def get_hand(self):
         return self._hand
-    
+
     def set_hand(self, hand: list):
         self._hand = hand
 
@@ -39,6 +40,6 @@ class Player:
 
     def get_laydowns(self):
         return self._laydowns
-    
+
     def add_to_laydowns(self, laydown: Laydown):
         return self._laydowns.append(laydown)
