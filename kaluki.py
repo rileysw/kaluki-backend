@@ -98,3 +98,7 @@ class Kaluki:
                     Laydown([Card(card[0], card[1], card[2]) for card in laydown]))
                 for card in laydown:
                     player.remove_from_hand(card[2])
+
+    # for testing
+    def restart_game(self):
+        self._table = None

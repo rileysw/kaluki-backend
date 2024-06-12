@@ -17,6 +17,12 @@ app.add_middleware(
 )
 
 
+# for testing
+@app.get("/restart")
+def restart():
+    kaluki.restart_game()
+
+
 @app.websocket("/setup_game")
 async def update_players(websocket: WebSocket):
     await manager.connect(websocket)
