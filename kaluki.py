@@ -51,14 +51,18 @@ class Kaluki:
                                 for card in hand])
                 break
 
-    def draw_card(self, name: str):
+    def draw_card(self, name: str, method: str):
         for player in self._table.get_players():
             if player.get_name() == name:
                 if len(player.get_hand()) == 15:
                     raise ValueError("Hand already has 15 cards.")
                 else:
-                    player.add_to_hand(len(player.get_hand()),
-                                       self._table.remove_from_deck())
+                    if method.endswith("deck"):
+                        player.add_to_hand(
+                            len(player.get_hand()), self._table.remove_from_deck())
+                    elif method.endswith("trash"):
+                        player.add_to_hand(
+                            len(player.get_hand()), self._table.remove_from_trash())
                     player.set_has_drawn(True)
                     break
 
