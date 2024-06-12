@@ -1,7 +1,6 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 
-from models import Hand
 from connection_manager import ConnectionManager
 from kaluki import Kaluki
 
