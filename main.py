@@ -85,6 +85,12 @@ async def play_game(websocket: WebSocket):
                             "method": data["method"],
                             "hand": kaluki.get_player_hand(data["user"]),
                             "allLaydowns": kaluki.get_laydowns()}
+            elif data["method"] == "update_laydown":
+                kaluki.update_laydown(data["user"], data["owner"], data["laydownId"], data["cardId"])
+                response = {"user": data["user"],
+                            "method": data["method"],
+                            "hand": kaluki.get_player_hand(data["user"]),
+                            "allLaydowns": kaluki.get_laydowns()}
             await manager.broadcast(response)
     except WebSocketDisconnect:
         manager.disconnect(websocket)

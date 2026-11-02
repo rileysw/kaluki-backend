@@ -98,6 +98,15 @@ class Kaluki:
                     Laydown([Card(card[0], card[1], card[2]) for card in laydown]))
                 for card in laydown:
                     player.remove_from_hand(card[2])
+    
+    def update_laydown(self, player_name: str, owner_name: str, laydown_id: int, card_id: int):
+        card = None
+        for player in self._table.get_players():
+            if player.get_name() == player_name:
+                    card = player.remove_from_hand(card_id)
+        for player in self._table.get_players():
+            if player.get_name() == owner_name:
+                player.update_laydown(laydown_id, card)
 
     # for testing
     def restart_game(self):

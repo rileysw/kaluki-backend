@@ -43,3 +43,7 @@ class Player:
 
     def add_to_laydowns(self, laydown: Laydown):
         return self._laydowns.append(laydown)
+
+    def update_laydown(self, laydown_id: int, card: Card):
+        # TODO: Re-order instead of adding to end
+        self._laydowns[laydown_id].add(len(self._laydowns[laydown_id].get()), card)
